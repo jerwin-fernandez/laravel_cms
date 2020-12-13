@@ -7,4 +7,10 @@
 .comment-reply {
   display: none; }
 
+.alert-sm {
+  display: inline-block !important;
+  padding: 3px !important;
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=app.css.map */

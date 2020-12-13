@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use Carbon\Carbon;
+
 class User extends Authenticatable
 {
     /**
@@ -26,5 +28,24 @@ class User extends Authenticatable
 
     public function role() {
         return $this->belongsTo('App\Role');
+    }
+
+    public function getCreatedAtAttribute($value) {
+        $carbonDate = new Carbon($value);
+        return $carbonDate->diffForHumans();
+    }
+
+    public function getUpdatedAtAttribute($value) {
+        $carbonDate = new Carbon($value);
+        return $carbonDate->diffForHumans();
+    }
+
+    public function getIsActiveAttribute($value) {
+        if((int) $value == 1) {
+            return '<span class="alert alert-sm alert-success">Active</span>';
+
+        }
+
+        return '<span class="alert alert-sm alert-danger">Inactive</span>';
     }
 }
