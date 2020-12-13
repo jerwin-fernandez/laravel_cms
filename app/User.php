@@ -14,7 +14,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'role_id', 'is_active', 'photo'
+        'name', 'email', 'password', 'role_id', 'is_active', 'photo_id'
     ];
 
     /**
@@ -30,6 +30,10 @@ class User extends Authenticatable
         return $this->belongsTo('App\Role');
     }
 
+    public function photo() {
+        return $this->belongsTo('App\Photo');
+    }
+
     public function getCreatedAtAttribute($value) {
         $carbonDate = new Carbon($value);
         return $carbonDate->diffForHumans();
@@ -43,9 +47,10 @@ class User extends Authenticatable
     public function getIsActiveAttribute($value) {
         if((int) $value == 1) {
             return '<span class="alert alert-sm alert-success">Active</span>';
-
         }
 
         return '<span class="alert alert-sm alert-danger">Inactive</span>';
     }
+
+    
 }

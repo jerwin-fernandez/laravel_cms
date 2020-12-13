@@ -12,6 +12,7 @@ use App\User;
 
 use App\Role;
 
+use App\Photo;
 
 class AdminUserController extends Controller
 {
@@ -51,7 +52,32 @@ class AdminUserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        User::create($request->all());
+
+        $input = $request->all();
+
+        // assign file
+        if($file = $request->file('photo_id')) {
+
+            // get the file name
+            $name = time() . $file->getClientOriginalName();
+
+            // move the file into directory
+            $file->move('images', $name);
+
+
+            $photo = Photo::create([
+                'file' => $name,
+            ]);
+
+            // assign for ready persist
+            $input['photo_id'] = $photo->id;
+        }
+
+        // encrypt password for laravel to match
+        $input['password'] = app('hash')->make($request->password);
+
+        // insert all the data base on associative array
+        User::create($input);
 
         return redirect('/admin/users');
     }

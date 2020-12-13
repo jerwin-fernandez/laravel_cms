@@ -14,7 +14,7 @@ class CreatePhotosTable extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('photo');
+            $table->string('file');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ class CreatePhotosTable extends Migration
      */
     public function down()
     {
-        Schema::drop('photos');
+        Schema::drop('file');
     }
 }
