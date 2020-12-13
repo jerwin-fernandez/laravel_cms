@@ -62,7 +62,7 @@ class AdminUserController extends Controller
             $name = time() . $file->getClientOriginalName();
 
             // move the file into directory
-            $file->move('images', $name);
+            $file->move(trim(User::$photo_dir, '/'), $name);
 
 
             $photo = Photo::create([
@@ -101,7 +101,19 @@ class AdminUserController extends Controller
      */
     public function edit($id)
     {
-        //
+
+        $user = User::find($id);
+
+        $roles = Role::pluck('name', 'id');
+
+        if(!$user) {
+            return redirect('/admin/users');
+        }
+
+        return view('admin.users.edit', [
+            'user' => $user,
+            'roles' => $roles,
+        ]);
     }
 
     /**

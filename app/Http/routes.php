@@ -24,3 +24,13 @@ Route::get('/admin', ['as' => 'admin.index', function(){
 }]);
 
 Route::resource('/admin/users', 'AdminUserController');
+
+Route::get('/test', function() {
+
+
+
+    $user = App\User::find(1);
+    dd($user->photo);
+
+
+});
