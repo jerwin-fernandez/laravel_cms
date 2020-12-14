@@ -23,14 +23,6 @@ Route::get('/admin', ['as' => 'admin.index', function(){
     return view('admin.index');
 }]);
 
-Route::resource('/admin/users', 'AdminUserController');
-
-Route::get('/test', function() {
-
-
-
-    $user = App\User::find(1);
-    dd($user->photo);
-
-
+Route::group(['middleware'=>'admin'], function() {
+    Route::resource('/admin/users', 'AdminUserController');
 });
