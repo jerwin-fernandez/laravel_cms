@@ -5,13 +5,14 @@
 
   @include('partials.form-error')
 
-  {!! Form::model($user, [
-    'route' => ['admin.users.update', $user],
-    'method' => 'PUT',
-    'files' => 'true',
-  ]) !!}
-
   <div class="row">
+
+    {!! Form::model($user, [
+      'route' => ['admin.users.update', $user],
+      'method' => 'PUT',
+      'files' => 'true',
+    ]) !!}
+
     <div class="col-md-4">
       <div class="form-group">
         <img src="{{ $user->photo ? $user->photo->file : 'https://via.placeholder.com/200' }}" class="img-responsive img-rounded" alt="{{ $user->photo ? $user->photo->file : 'Image placeholder'  }}"> <br>
@@ -19,7 +20,7 @@
         {!! Form::file('photo_id', null, ['class' => 'form-control']) !!}
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-8">
       <div class="form-group">
         {!! Form::label('name', 'Name:') !!}
         {!! Form::text('name', null, ['class' => 'form-control']) !!}
@@ -44,10 +45,19 @@
     <div class="col-md-12">
       <div class="form-group">
         {!! Form::submit('Update User', ['class' => 'btn btn-primary']) !!}
+    {!! Form::close() !!}
+
+    {!! Form::open([
+      'route' => ['admin.users.destroy', $user->id],
+      'method' => 'DELETE',
+      'style' => 'display:inline-block',
+      'class' => 'pull-right'
+    ]) !!}
+        {!! Form::submit('Delete User', ['class' => 'btn btn-danger']) !!}
+    {!! Form::close() !!}
+      
       </div>
     </div>
+
   </div>
-
-  {!! Form::close() !!}
-
 @endsection

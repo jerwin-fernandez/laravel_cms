@@ -45,18 +45,10 @@ class User extends Authenticatable
         $carbonDate = new Carbon($value);
         return $carbonDate->diffForHumans();
     }
-
-    public function getIsActiveAttribute($value) {
-        if((int) $value == 1) {
-            return '<span class="alert alert-sm alert-success">Active</span>';
-        }
-
-        return '<span class="alert alert-sm alert-danger">Inactive</span>';
-    }
-
     
     public function isAdmin() {
-        if(strtolower($this->role->name) == 'administrator') {
+
+        if((strtolower($this->role->name) == 'administrator') && ($this->is_active == 1)) {
             return true;
         } 
 

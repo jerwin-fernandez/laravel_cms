@@ -10,6 +10,8 @@ use App\Http\Requests\UserRequest;
 
 use App\Http\Requests\UserEditRequest;
 
+use Illuminate\Support\Facades\Session;
+
 use App\User;
 
 use App\Role;
@@ -81,7 +83,9 @@ class AdminUserController extends Controller
         }
 
         // insert all the data base on associative array
-        User::create($input);
+        $user = User::create($input);
+
+        Session::flash('created_user', "User {$user->name} has been created");
 
         return redirect('/admin/users');
     }
@@ -153,6 +157,8 @@ class AdminUserController extends Controller
 
         $user->update($input);
 
+        Session::flash('updated_user', "User {$user->name} has been updated.");
+
         return redirect('/admin/users');
 
     }
@@ -165,6 +171,18 @@ class AdminUserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        // first delete the photo first in the directory
+        unlink(public_path() . $user->photo->file);
+
+        // delete its relationship to the photo data
+        $user->photo()->delete();
+
+        $user->delete();
+
+        Session::flash('deleted_user', "User {$user->name} has been deleted.");
+
+        return redirect('/admin/users');
     }
 }
