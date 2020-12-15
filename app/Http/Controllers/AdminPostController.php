@@ -12,6 +12,8 @@ use App\Post;
 
 use App\Photo;
 
+use App\Category;
+
 use Illuminate\Support\Facades\Auth;
 
 class AdminPostController extends Controller
@@ -37,7 +39,13 @@ class AdminPostController extends Controller
    */
   public function create()
   {
-      return view('admin.posts.create');
+    $categories = Category::pluck('name', 'id');
+   
+    $categories->prepend('Choose Category', '');
+
+    return view('admin.posts.create', [
+      'categories' => $categories,
+    ]);
   }
 
   /**
@@ -87,7 +95,16 @@ class AdminPostController extends Controller
    */
   public function edit($id)
   {
-      return view('admin.posts.edit');
+    $post = Post::find($id);
+
+    $categories = Category::pluck('name', 'id');
+  
+    $categories->prepend('Choose Category', '');
+    
+    return view('admin.posts.edit', [
+      'post' => $post,
+      'categories' => $categories
+    ]);
   }
 
   /**
@@ -99,7 +116,24 @@ class AdminPostController extends Controller
    */
   public function update(Request $request, $id)
   {
-      //
+    
+
+    $input = $request->all();
+
+    if($file = $request->file('photo_id')) {
+      $name = time() . $file->getClientOriginalName();
+
+      $file->move(trim(Photo::$photo_dir, '/'), $name);
+
+      $photo = Photo::create(['file' => $name]);
+
+      $input['photo_id'] = $photo->id;
+    }
+
+    Post::whereId($id)->first()->update($input);
+
+    return redirect('/admin/posts');
+
   }
 
   /**

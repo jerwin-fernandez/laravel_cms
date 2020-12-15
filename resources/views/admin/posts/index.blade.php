@@ -26,7 +26,7 @@
             <img src="{{ $post->photo ? $post->photo->file : 'https://via.placeholder.com/50' }}" alt="{{ $post->photo ? $post->photo->file : 'Image placeholder'  }}" class="img-thumbnail" width="100px">
           </td>
           <td><a href="{{ route('admin.posts.edit', $post->id) }}">{{ $post->title }}</a></td>
-          <td>{{ $post->category_id }}</td>
+          <td>{{ $post->category ? $post->category->name : 'Uncategorized' }}</td>
           <td>{{ $post->user->name }}</td>
           <td>{{ $post->created_at->diffForHumans() }}</td>
           <td>{{ $post->updated_at->diffForHumans() }}</td>
