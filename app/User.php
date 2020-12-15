@@ -35,16 +35,6 @@ class User extends Authenticatable
     public function photo() {
         return $this->belongsTo('App\Photo');
     }
-
-    public function getCreatedAtAttribute($value) {
-        $carbonDate = new Carbon($value);
-        return $carbonDate->diffForHumans();
-    }
-
-    public function getUpdatedAtAttribute($value) {
-        $carbonDate = new Carbon($value);
-        return $carbonDate->diffForHumans();
-    }
     
     public function isAdmin() {
 
@@ -53,6 +43,10 @@ class User extends Authenticatable
         } 
 
         return false;
+    }
+
+    public function posts() {
+        return $this->hasMany('App\Post');
     }
 
 }

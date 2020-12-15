@@ -53,8 +53,8 @@
               <span class="alert alert-sm alert-danger">Inactive</span>
             @endif
           </td>
-          <td>{{ $user->created_at }}</td>
-          <td>{{ $user->updated_at }}</td>
+          <td>{{ $user->created_at->diffForHumans() }}</td>
+          <td>{{ $user->updated_at->diffForHumans() }}</td>
         </tr>
         @endforeach
       
