@@ -116,7 +116,6 @@ class AdminPostController extends Controller
    */
   public function update(Request $request, $id)
   {
-    
 
     $input = $request->all();
 
@@ -144,6 +143,16 @@ class AdminPostController extends Controller
    */
   public function destroy($id)
   {
-      //
+      $post = Post::findOrFail($id);
+
+      if($post) {
+        unlink(public_path() . $post->photo->file);
+
+        $post->photo()->delete();
+  
+        $post->delete();
+      }
+      
+      return redirect('/admin/posts');
   }
 }

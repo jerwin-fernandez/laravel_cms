@@ -173,15 +173,17 @@ class AdminUserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // first delete the photo first in the directory
-        unlink(public_path() . $user->photo->file);
+        if($user) {
+            // first delete the photo first in the directory
+            unlink(public_path() . $user->photo->file);
 
-        // delete its relationship to the photo data
-        $user->photo()->delete();
+            // delete its relationship to the photo data
+            $user->photo()->delete();
 
-        $user->delete();
+            $user->delete();
 
-        Session::flash('deleted_user', "User {$user->name} has been deleted.");
+            Session::flash('deleted_user', "User {$user->name} has been deleted.");
+        }
 
         return redirect('/admin/users');
     }
