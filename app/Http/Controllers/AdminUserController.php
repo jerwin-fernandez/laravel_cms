@@ -133,6 +133,11 @@ class AdminUserController extends Controller
      */
     public function update(UserEditRequest $request, $id)
     {
+
+        $this->validate($request, [
+            'email' => 'required|unique:users,email,'.$id,
+        ]);
+
         $user = User::findOrFail($id);
 
         if(trim($request->password) == '') {
@@ -175,7 +180,9 @@ class AdminUserController extends Controller
 
         if($user) {
             // first delete the photo first in the directory
-            unlink(public_path() . $user->photo->file);
+            if($user->photo) {
+                unlink(public_path() . $user->photo->file);
+            }
 
             // delete its relationship to the photo data
             $user->photo()->delete();

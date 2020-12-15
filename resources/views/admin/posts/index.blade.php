@@ -4,6 +4,24 @@
     
   <h1 class="page-header">Posts</h1>
 
+  @if (Session::has('created_post'))
+      <div class="alert alert-success">
+        {{ session('created_post') }}
+      </div>
+  @endif
+
+  @if (Session::has('updated_post'))
+      <div class="alert alert-info">
+        {{ session('updated_post') }}
+      </div>
+  @endif
+
+  @if (Session::has('deleted_post'))
+      <div class="alert alert-danger">
+        {{ session('deleted_post') }}
+      </div>
+  @endif
+
   <table class="table pt-1">
     <thead>
       <tr>

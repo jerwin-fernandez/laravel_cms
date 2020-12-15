@@ -16,6 +16,8 @@ use App\Category;
 
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Session;
+
 class AdminPostController extends Controller
 {
   /**
@@ -72,6 +74,8 @@ class AdminPostController extends Controller
     
     $user->posts()->create($input);
 
+    Session::flash('created_post', "Post {$request->title} has been posted");
+
     return redirect('/admin/posts');
 
   }
@@ -95,6 +99,7 @@ class AdminPostController extends Controller
    */
   public function edit($id)
   {
+
     $post = Post::find($id);
 
     $categories = Category::pluck('name', 'id');
@@ -116,6 +121,9 @@ class AdminPostController extends Controller
    */
   public function update(Request $request, $id)
   {
+    $this->validate($request, [
+      'title' => 'required|unique:posts,title,'.$id,
+    ]);
 
     $input = $request->all();
 
@@ -130,6 +138,8 @@ class AdminPostController extends Controller
     }
 
     Post::whereId($id)->first()->update($input);
+
+    Session::flash('updated_post', "Post {$request->title} has been updated");
 
     return redirect('/admin/posts');
 
@@ -146,11 +156,16 @@ class AdminPostController extends Controller
       $post = Post::findOrFail($id);
 
       if($post) {
-        unlink(public_path() . $post->photo->file);
+        if($post->photo) {
+          unlink(public_path() . $post->photo->file);
+        }
 
         $post->photo()->delete();
   
         $post->delete();
+
+        Session::flash('updated_post', "Post has been deleted");
+
       }
       
       return redirect('/admin/posts');
