@@ -63,10 +63,16 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+
+        $user_count = User::count();
+
+        // if the user count zero, you will create an admin role, if not then create a subscriber role.
+        $role_id = ($user_count === 0) ? 1 : 3;
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'role_id' => 3,
+            'role_id' => $role_id,
             'password' => bcrypt($data['password']),
         ]);
     }
