@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\CommentReply;
+
+use Illuminate\Support\Facades\Auth;
+
 class CommentreplyController extends Controller
 {
     /**
@@ -37,6 +41,28 @@ class CommentreplyController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    public function createReply(Request $request)
+    {
+        $user = Auth::user();
+
+        $data = [
+            'comment_id' => $request->comment_id,
+            'author' => $user->name,
+            'email' => $user->email,
+            'body' => $request->body,
+        ];
+        
+        if($user->photo) {
+            $data['photo'] = $user->photo->file; 
+        }
+
+        CommentReply::create($data);
+
+        session()->flash('reply_message', 'Your reply has been submitted and is waiting for moderation.');
+
+        return redirect()->back();
     }
 
     /**
@@ -83,4 +109,5 @@ class CommentreplyController extends Controller
     {
         //
     }
+
 }
