@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Comment;
+
+use Illuminate\Support\Facades\Auth;
+
 class PostCommentController extends Controller
 {
     /**
@@ -15,7 +19,11 @@ class PostCommentController extends Controller
      */
     public function index()
     {
-        return view('admin.comments.index');
+        $comments = Comment::orderBy('created_at', 'DESC')->get();
+
+        return view('admin.comments.index', [
+            'comments' => $comments
+        ]);
     }
 
     /**
@@ -36,7 +44,24 @@ class PostCommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        $data = [
+            'post_id' => $request->post_id,
+            'author' => $user->name,
+            'email' => $user->email,
+            'body' => $request->body,
+        ];
+        
+        if($user->photo) {
+            $data['photo'] = $user->photo->file; 
+        }
+
+        Comment::create($data);
+
+        session()->flash('comment_message', 'Your message has been submitted and is waiting for moderation.');
+
+        return redirect()->back();
     }
 
     /**
@@ -70,7 +95,11 @@ class PostCommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+
+        $comment->update($request->all());
+
+        return redirect()->back();
     }
 
     /**
@@ -81,6 +110,10 @@ class PostCommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+
+        $comment->delete();
+
+        return redirect()->back();
     }
 }

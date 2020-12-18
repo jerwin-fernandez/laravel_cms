@@ -24,28 +24,28 @@
     
 
     <table class="table pt-1">
-        <thead>
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Category</th>
+          <th scope="col">Slug</th>
+          <th scope="col">Date Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if ($categories)
+  
+          @foreach ($categories as $category)
           <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Category</th>
-            <th scope="col">Slug</th>
-            <th scope="col">Date Created</th>
+            <td>{{ $category->id }}</td>
+            <td><a href="{{ route('admin.categories.edit', $category->id) }}">{{ $category->name }}</a></td>
+            <td>{{ $category->slug }}</td>
+            <td>{{ $category->created_at->diffForHumans() }}</td>
           </tr>
-        </thead>
-        <tbody>
-          @if ($categories)
-    
-            @foreach ($categories as $category)
-            <tr>
-              <td>{{ $category->id }}</td>
-              <td><a href="{{ route('admin.categories.edit', $category->id) }}">{{ $category->name }}</a></td>
-              <td>{{ $category->slug }}</td>
-              <td>{{ $category->created_at->diffForHumans() }}</td>
-            </tr>
-            @endforeach
-          
-          @endif
-        </tbody>
-      </table>
+          @endforeach
+        
+        @endif
+      </tbody>
+    </table>
 
 @endsection
