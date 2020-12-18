@@ -71,6 +71,5 @@
         </table>
     @else
         <h1>No Comments</h1>
-
     @endif
 @endsection

@@ -31,7 +31,7 @@
         <th scope="col">Category</th>
         <th scope="col">Author</th>
         <th scope="col">Created</th>
-        <th scope="col">Updated</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
@@ -47,7 +47,10 @@
           <td>{{ $post->category ? $post->category->name : 'Uncategorized' }}</td>
           <td>{{ $post->user->name }}</td>
           <td>{{ $post->created_at->diffForHumans() }}</td>
-          <td>{{ $post->updated_at->diffForHumans() }}</td>
+          <td>
+            <a href="{{ route('home.post', $post->id) }}" target="_blank">View Post</a> | 
+            <a href="{{ route('admin.comments.show', $post->id) }}"  >View Comment</a>
+          </td>
         </tr>
         @endforeach
       
