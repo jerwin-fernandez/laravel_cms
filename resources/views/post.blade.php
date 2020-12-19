@@ -89,10 +89,18 @@
             {{ $comment->body }}
             
             
-            @if (count($comment->replies) > 0)
+            @if ($max_reply = count($comment->replies) > 0)
+
+             {{-- showing only 1 reply button per comment --}}
+              @php 
+              $max = count($comment->replies);
+              $count = 0;
+              @endphp
 
               @foreach($comment->replies()->where('is_active', 1)->get() as $reply)
-
+                @php
+                    $count += 1;
+                @endphp
                 <!-- Nested Comment -->
                 <div class="media">
                   <a class="pull-left" href="#">
@@ -104,7 +112,10 @@
                       </h4>
                       {{ $reply->body }}
                   </div>
-
+                  
+                  {{-- showing only 1 reply button per comment --}}
+                  {{-- if count and max is equal means it is the last iteration then show the reply button at the last comment --}}
+                  @if ($count === $max)
                   <div class="comment-reply-container">
                     <button class="toggle-reply btn btn-primary pull-right">Reply</button> <br>
 
@@ -129,8 +140,9 @@
                       {!! Form::close() !!}
                       {{-- end reply form --}}
                     </div>
-                    
+
                   </div>
+                  @endif
 
                 </div>
                 <!-- End Nested Comment -->
