@@ -88,51 +88,73 @@
             </h4>
             {{ $comment->body }}
             
+            
             @if (count($comment->replies) > 0)
 
-            @foreach($comment->replies()->where('is_active', 1)->get() as $reply)
-              <!-- Nested Comment -->
-              <div class="media">
-                <a class="pull-left" href="#">
-                    <img class="media-object" src="{{  $reply->photo ? $reply->photo : 'http://placehold.it/64x64' }}" alt="" width="64" height="64">
-                </a>
-                <div class="media-body">
-                    <h4 class="media-heading"> {{ $reply->author }}
-                      <small>{{ $reply->created_at->toFormattedDateString() }} at {{ $reply->created_at->format('g:i A') }}</small>
-                    </h4>
-                    {{ $reply->body }}
+              @foreach($comment->replies()->where('is_active', 1)->get() as $reply)
+
+                <!-- Nested Comment -->
+                <div class="media">
+                  <a class="pull-left" href="#">
+                      <img class="media-object" src="{{  $reply->photo ? $reply->photo : 'http://placehold.it/64x64' }}" alt="" width="64" height="64">
+                  </a>
+                  <div class="media-body">
+                      <h4 class="media-heading"> {{ $reply->author }}
+                        <small>{{ $reply->created_at->toFormattedDateString() }} at {{ $reply->created_at->format('g:i A') }}</small>
+                      </h4>
+                      {{ $reply->body }}
+                  </div>
+
+                  <div class="comment-reply-container">
+                    <button class="toggle-reply btn btn-primary pull-right">Reply</button> <br>
+
+                    <div class="comment-reply-form">
+                      {{-- reply form --}}
+                      {!! Form::open([
+                        'action' => 'CommentReplyController@createReply',
+                        'method' => 'POST'
+                      ]) !!}
+
+                      {!! Form::hidden('comment_id', $comment->id) !!}
+
+                      <div class="form-group">
+                        {!! Form::label('body', 'Reply:') !!}
+                        {!! Form::textarea('body', null, ['class' => 'form-control', 'rows' => 5]) !!}
+                      </div>
+
+                      <div class="form-group">
+                        {{ Form::submit('Submit', ['class' => 'btn btn-primary']) }}
+                      </div>
+
+                      {!! Form::close() !!}
+                      {{-- end reply form --}}
+                    </div>
+                    
+                  </div>
+
                 </div>
-              </div>
-              <!-- End Nested Comment -->
-                
-            @endforeach
+                <!-- End Nested Comment -->
+                  
+              @endforeach
 
             @endif
-
-            {{-- reply form --}}
-            {!! Form::open([
-              'action' => 'CommentReplyController@createReply',
-              'method' => 'POST'
-            ]) !!}
-
-            {!! Form::hidden('comment_id', $comment->id) !!}
-
-            <div class="form-group">
-              {!! Form::label('body', 'Reply:') !!}
-              {!! Form::textarea('body', null, ['class' => 'form-control', 'rows' => 5]) !!}
-            </div>
-
-            <div class="form-group">
-              {{ Form::submit('Submit', ['class' => 'btn btn-primary']) }}
-            </div>
-
-            {!! Form::close() !!}
-            {{-- end reply form --}}
-
         </div>
     </div>
     @endforeach
   @endif
+
+  @section('scripts')
+
+  <script>
+
+      $(".comment-reply-container .toggle-reply").click(function() {
+        $(this).next().next().slideToggle();
+      });
+
+  </script>
+
+      
+  @endsection
 
 
 @endsection
