@@ -14,6 +14,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Post</th>
                 <th scope="col">Status</th>
+                <th scope="col">View Replie</th>
                 <th scope="col">Action</th>
                 <th scope="col">Created</th>
                 </tr>
@@ -53,6 +54,7 @@
                             @endif
 
                         </td>
+                        <td><a href="{{ route('admin.comment.replies.show', $comment->id) }}" >View Replies</a></td>
                         <td>
                             {!! Form::open([
                                 'route' => ['admin.comments.destroy', $comment->id],
