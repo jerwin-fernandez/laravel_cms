@@ -24,7 +24,7 @@ class PostCreateRequest extends Request
     public function rules()
     {
         return [
-            'title'       => 'required|unique:posts',
+            'title'       => 'required',
             'body'        => 'required',
             'category_id' => 'required'
         ];
