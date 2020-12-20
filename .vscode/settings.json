@@ -1,8 +1,0 @@
-{
-    "editor.accessibilitySupport": "on",
-    "editor.tabSize": 2,
-    "editor.wordWrap": "on",
-    "editor.wordWrapColumn": 70,
-    "html.format.wrapAttributes": "force-aligned",
-    "diffEditor.wordWrap": "on"
-}

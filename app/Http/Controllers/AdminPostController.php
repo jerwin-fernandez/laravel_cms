@@ -171,8 +171,8 @@ class AdminPostController extends Controller
       return redirect('/admin/posts');
   }
 
-  public function post($slug) {
-    $post = Post::where('slug', $slug)->first();
+  public function post($id) {
+    $post = Post::where('id', $id)->first();
 
     $comments = $post->comments()->where('is_active', 1)->get();
 
